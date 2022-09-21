@@ -16,4 +16,7 @@ async function run(id, address) {
 }
 
 console.log('---- BuebioFuture - balanceOf');
-run(1, '0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
+run(
+    1, // token ID
+    '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', // wallet address
+);

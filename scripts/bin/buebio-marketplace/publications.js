@@ -13,4 +13,6 @@ async function run(index) {
 }
 
 console.log('---- BuebioMarketplace - publications');
-run(4);
+run(
+    4, // index
+);

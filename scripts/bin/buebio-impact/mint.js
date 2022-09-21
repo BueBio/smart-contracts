@@ -31,4 +31,7 @@ async function run(id, amount) {
 }
 
 console.log('---- BuebioImpact - mint');
-run(2, 30);
+run(
+    2, // id: token ID
+    30, // amount: quantity of tokens
+);

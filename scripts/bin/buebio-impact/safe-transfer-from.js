@@ -27,4 +27,8 @@ async function run(id, amount, toWallet) {
 }
 
 console.log('---- BuebioImpact - safeTransferFrom');
-run(2, 5, '0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
+run(
+    2, // id: token ID
+    5, // amount: quantity of tokens
+    '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', // toWallet: destiny wallet address
+);
