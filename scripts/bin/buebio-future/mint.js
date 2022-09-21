@@ -41,6 +41,7 @@ async function run(id, amount, availableUntil, payToken, payAmount, recipient) {
     console.log(response);
 }
 
+console.log('---- BuebioFuture - mint');
 run(
     1,
     400,

@@ -7,9 +7,9 @@ const CONTRACT_ABI = require('../../../abi/contracts/buebio-impact.sol/BuebioImp
 async function run() {
     const provider = ethersInstance();
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-    const response = await contract.owner()
-    console.log(response);
+    const response = await contract.maxId()
+    console.log(response.toNumber());
 }
 
-console.log('---- BuebioImpact - owner');
+console.log('---- BuebioImpact - maxId');
 run();

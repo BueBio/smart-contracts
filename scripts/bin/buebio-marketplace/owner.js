@@ -1,15 +1,16 @@
 'use strict';
 require('dotenv').config();
 const {ethersInstance, loadContract} = require('../../utils/ethers');
-const CONTRACT_ADDRESS = process.env.CONTRACT_BUEBIOIMPACT_ADDRESS;
-const CONTRACT_ABI = require('../../../abi/contracts/buebio-impact.sol/BuebioImpact.json');
+const CONTRACT_ADDRESS = process.env.CONTRACT_BUEBIOMARKETPLACE_ADDRESS;
+const CONTRACT_ABI = require('../../../abi/contracts/buebio-marketplace.sol/BuebioMarketplace.json');
 
 async function run() {
     const provider = ethersInstance();
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
-    const response = await contract.owner()
+
+    const response = await contract.owner();
     console.log(response);
 }
 
-console.log('---- BuebioImpact - owner');
+console.log('---- BuebioMarketplace - owner');
 run();

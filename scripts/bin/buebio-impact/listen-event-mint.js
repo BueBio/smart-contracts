@@ -19,4 +19,5 @@ async function run(id, address) {
     });
 }
 
+console.log('---- BuebioImpact - listen event mint');
 run();

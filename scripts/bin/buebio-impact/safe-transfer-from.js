@@ -6,29 +6,25 @@ const ACCOUNT_PRIVATEKEY = process.env.ACCOUNT_PRIVATEKEY;
 const ACCOUNT_ADDRESS = process.env.ACCOUNT_ADDRESS;
 const CONTRACT_ABI = require('../../../abi/contracts/buebio-impact.sol/BuebioImpact.json');
 
-async function run(id, amount) {
+async function run(id, amount, toWallet) {
     const provider = ethersInstance();
     const wallet = walletOfProvider(ACCOUNT_PRIVATEKEY, provider);
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
-    const estimateGas = await contract.estimateGas.mint(ACCOUNT_ADDRESS, id, amount, "0x");
-    console.log(`Estimate gas -> ${estimateGas.toString()}`);
-    const gasPrice = await provider.getGasPrice();
-    console.log(`Gas price -> ${gasPrice.toString()}`);
-    const response = await contract.mint(
+    const response = await contract.safeTransferFrom(
         ACCOUNT_ADDRESS,
+        toWallet,
         id,
         amount,
-        "0x",
-        {
-            gasLimit: estimateGas,
-            gasPrice,
-        }
+        '0x'
     );
     console.log('response', response);
-    await response.wait()
-    console.log(response);
+    response.wait()
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => console.error);
 }
 
-console.log('---- BuebioImpact - mint');
-run(2, 30);
+console.log('---- BuebioImpact - safeTransferFrom');
+run(2, 5, '0x70997970C51812dc3A010C7d01b50e0d17dc79C8');
