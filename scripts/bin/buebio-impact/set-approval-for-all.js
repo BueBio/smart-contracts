@@ -2,21 +2,16 @@
 require('dotenv').config();
 const {ethersInstance, loadContract, walletOfProvider} = require('../../utils/ethers');
 const CONTRACT_ADDRESS = process.env.CONTRACT_BUEBIOIMPACT_ADDRESS;
-const ACCOUNT_PRIVATEKEY = process.env.ACCOUNT_PRIVATEKEY;
-const ACCOUNT_ADDRESS = process.env.ACCOUNT_ADDRESS;
 const CONTRACT_ABI = require('../../../abi/contracts/buebio-impact.sol/BuebioImpact.json');
 
-async function run(id, amount, toWallet) {
+async function run(privateKey, toWallet, approved) {
     const provider = ethersInstance();
-    const wallet = walletOfProvider(ACCOUNT_PRIVATEKEY, provider);
+    const wallet = walletOfProvider(privateKey, provider);
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
-    const response = await contract.safeTransferFrom(
-        ACCOUNT_ADDRESS,
+    const response = await contract.setApprovalForAll(
         toWallet,
-        id,
-        amount,
-        '0x'
+        approved
     );
     console.log('response', response);
     response.wait()
@@ -26,9 +21,9 @@ async function run(id, amount, toWallet) {
       .catch((error) => console.error);
 }
 
-console.log('---- BuebioImpact - safeTransferFrom');
+console.log('---- BuebioImpact - setApprovalForAll');
 run(
-    2, // id: token ID
-    15, // amount: quantity of tokens
-    '0x70997970C51812dc3A010C7d01b50e0d17dc79C8', // toWallet: destiny wallet address
+    'a6a6c8730f880d1448af6f40e77235d1629c62271de240aa04fc5bfffe2e298d', // privateKey
+    '0xE20f7eE0064CD832674E6B2979Ecd89662c6c6D1', // toWallet: wallet to receive permissions
+    true, // approved: if true it will grant permissions, if false it will revoke permissions
 );

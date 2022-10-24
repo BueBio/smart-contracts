@@ -44,9 +44,9 @@ async function run(id, amount, availableUntil, payToken, payAmount, recipient) {
 console.log('---- BuebioFuture - mint');
 run(
     1, // id: token ID
-    400, // amount: quantity of tokens
-    new Date('2022-09-01T03:00:00.000Z'), // availableUntil: available until (date)
-    '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', // payToken: payment token address
-    3, // payAmount: price - amount of payTokens of each token
-    '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC' // recipient: wallet owner of this tokens
+    200, // amount: quantity of tokens
+    new Date('2022-10-08T00:00:00Z'), // availableUntil: available until (date)
+    '0x2AE1C84F7Bc56323EA6bc588E828DAc9E1C91BcD', // payToken: payment token address
+    7, // payAmount: price - amount of payTokens of each token
+    '0x59d4f88934AB4406fBBbcCBC600b4fDf35B2bF15' // recipient: wallet owner of this tokens
 );

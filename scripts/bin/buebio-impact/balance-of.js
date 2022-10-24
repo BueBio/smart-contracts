@@ -18,5 +18,5 @@ async function run(id, address) {
 console.log('---- BuebioImpact - balanceOf');
 run(
     1, // id: token ID
-    '0x5b5f8F2AbfCFb80A3037B39481c3c975a2cDb4b2', // address: wallet address
+    '0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC', // address: wallet address
 );

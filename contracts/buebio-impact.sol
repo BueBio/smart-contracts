@@ -10,7 +10,7 @@ contract BuebioImpact is ERC1155 {
 
   event Mint(uint256 indexed id, address account, uint256 amount);
 
-  constructor() ERC1155("https://buebio.com/resources/productions/{id}.json") {
+  constructor() ERC1155("https://api.dev.buebio.com/public/tokens/json/buebio-impact/{id}.json") {
     owner = msg.sender;
   }
 

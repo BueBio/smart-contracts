@@ -21,7 +21,7 @@ contract BuebioFuture is ERC1155, IERC1155Receiver {
   event Mint(uint256 indexed id, uint256 amount, FutureProduction production);
   event Buy(uint256 indexed id, address wallet, uint256 amount, address payToken, uint256 payAmount);
 
-  constructor() ERC1155("https://buebio.com/resources/productions/{id}.json") {
+  constructor() ERC1155("https://api.dev.buebio.com/public/tokens/json/buebio-future/{id}.json") {
     owner = msg.sender;
   }
 
@@ -38,7 +38,6 @@ contract BuebioFuture is ERC1155, IERC1155Receiver {
     require(amount > 0, "Amount must be greater than zero");
     require(id > 0, "Id must be greater than zero");
     require(!minted[id], "Id already minted");
-    require(availableUntil > block.timestamp, "availableUntil must be greater than now");
     require(payAmount > 0, "payAmount must be greater than 0");
     if (id > maxId) {
       maxId = id;
@@ -59,7 +58,6 @@ contract BuebioFuture is ERC1155, IERC1155Receiver {
     uint256 amount
   ) external {
     require(minted[id], "Invalid id");
-    require(productions[id].availableUntil > block.timestamp, "Production not available");
     require(balanceOf(address(this), id) >= amount, "Not enough tokens");
     require(IERC20(productions[id].payToken).allowance(msg.sender, productions[id].recipient) >= amount * productions[id].payAmount, "Must approve token transference");
     IERC20(productions[id].payToken).transferFrom(msg.sender, productions[id].recipient, amount * productions[id].payAmount);

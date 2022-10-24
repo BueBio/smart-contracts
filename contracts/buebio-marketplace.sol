@@ -4,6 +4,7 @@ pragma solidity ^0.8.1;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "@openzeppelin/contracts/token/ERC1155/IERC1155.sol";
 import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/token/ERC1155/IERC1155Receiver.sol";
 
 struct Publication {
   address owner;
@@ -13,7 +14,7 @@ struct Publication {
   uint256 payAmount;
 }
 
-contract BuebioMarketplace {
+contract BuebioMarketplace is IERC1155Receiver {
   using SafeERC20 for IERC20;
 
   address public owner;
@@ -21,7 +22,7 @@ contract BuebioMarketplace {
   uint256 public publicationsQuantity = 0;
 
   // Length of publications mapping (included removed publications)
-  uint256 private publicationsLength = 0;
+  uint256 public publicationsLength = 0;
   // Information of each publication by ID
   mapping(uint256 => Publication) public publications;
   // Publication IDs by wallet address. Each wallet have a mapping with incremental ID (like an array)
@@ -111,6 +112,18 @@ contract BuebioMarketplace {
     emit Buy(id, msg.sender, toWallet);
   }
 
+  function onERC1155Received(address operator, address from, uint256 id, uint256 value, bytes memory data) external pure override returns (bytes4) {
+    return bytes4(keccak256("onERC1155Received(address,address,uint256,uint256,bytes)"));
+  }
+
+  function onERC1155BatchReceived(address operator, address from, uint256[] memory ids, uint256[] memory values, bytes memory data) external pure override returns (bytes4) {
+    return bytes4(keccak256("onERC1155BatchReceived(address,address,uint256[],uint256[],bytes)"));
+  }
+
+  function supportsInterface(bytes4 interfaceId) public pure virtual override returns (bool) {
+    return interfaceId == type(IERC1155Receiver).interfaceId;
+  }
+
 
   function _addPublication(
     address tokenAddress,
@@ -135,17 +148,18 @@ contract BuebioMarketplace {
   function _removePublication(
     uint256 id
   ) private {
+    address owner = publications[id].owner;
     uint256 ownedIdx = _publicationsByWalletIndex[id];
-    uint256 lastOwnedIdx = publicationsQuantityByWallet[msg.sender];
+    uint256 lastOwnedIdx = publicationsQuantityByWallet[owner];
 
     if (ownedIdx != lastOwnedIdx) {
-      uint256 lastOwnedId = publicationsByWallet[msg.sender][lastOwnedIdx];
-      publicationsByWallet[msg.sender][ownedIdx] = lastOwnedId;
+      uint256 lastOwnedId = publicationsByWallet[owner][lastOwnedIdx];
+      publicationsByWallet[owner][ownedIdx] = lastOwnedId;
       _publicationsByWalletIndex[lastOwnedId] = ownedIdx;
     }
-    delete publicationsByWallet[msg.sender][lastOwnedIdx];
+    delete publicationsByWallet[owner][lastOwnedIdx];
     delete _publicationsByWalletIndex[id];
-    publicationsQuantityByWallet[msg.sender] -= 1;
+    publicationsQuantityByWallet[owner] -= 1;
 
     delete publications[id];
     publicationsQuantity -= 1;

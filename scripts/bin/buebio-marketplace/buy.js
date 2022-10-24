@@ -4,19 +4,21 @@ const {ethersInstance, loadContract, walletOfProvider} = require('../../utils/et
 const CONTRACT_ADDRESS = process.env.CONTRACT_BUEBIOMARKETPLACE_ADDRESS;
 const CONTRACT_ABI = require('../../../abi/contracts/buebio-marketplace.sol/BuebioMarketplace.json');
 
-async function run(privateKey, id) {
+async function run(privateKey, publicationId, toWallet) {
     const provider = ethersInstance();
     const wallet = walletOfProvider(privateKey, provider);
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
-    const estimateGas = await contract.estimateGas.unpublish(
-        id
+    const estimateGas = await contract.estimateGas.buy(
+        publicationId,
+        toWallet
     );
     console.log(`Estimate gas -> ${estimateGas.toString()}`);
     const gasPrice = await provider.getGasPrice();
     console.log(`Gas price -> ${gasPrice.toString()}`);
-    const response = await contract.unpublish(
-        id,
+    const response = await contract.buy(
+        publicationId,
+        toWallet,
         {
             gasLimit: estimateGas,
             gasPrice,
@@ -27,8 +29,9 @@ async function run(privateKey, id) {
     console.log(response);
 }
 
-console.log('---- BuebioMarketplace - unpublish');
+console.log('---- BuebioMarketplace - buy');
 run(
-    '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d', // privateKey
-    1, // uint256 id
+    '7a6913cc79fa70497afbffc1fd58b9af0b97196c4ee23f19eb31a085d0613993', // privateKey
+    2, // publicationId
+    '0x796867C8024Ec53dc06e801919944CB934Afbbe9' // address toWallet
 );

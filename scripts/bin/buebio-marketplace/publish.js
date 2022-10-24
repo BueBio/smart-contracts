@@ -1,5 +1,6 @@
 'use strict';
 require('dotenv').config();
+const {BigNumber} = require('ethers');
 const {ethersInstance, loadContract, walletOfProvider} = require('../../utils/ethers');
 const CONTRACT_ADDRESS = process.env.CONTRACT_BUEBIOMARKETPLACE_ADDRESS;
 const CONTRACT_ABI = require('../../../abi/contracts/buebio-marketplace.sol/BuebioMarketplace.json');
@@ -9,11 +10,13 @@ async function run(privateKey, tokenAddress, tokenId, payToken, payAmount) {
     const wallet = walletOfProvider(privateKey, provider);
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, wallet);
 
+    const payAmountHex = BigNumber.from(payAmount).toHexString();
+
     const estimateGas = await contract.estimateGas.publish(
         tokenAddress,
         tokenId,
         payToken,
-        payAmount
+        payAmountHex
     );
     console.log(`Estimate gas -> ${estimateGas.toString()}`);
     const gasPrice = await provider.getGasPrice();
@@ -22,7 +25,7 @@ async function run(privateKey, tokenAddress, tokenId, payToken, payAmount) {
         tokenAddress,
         tokenId,
         payToken,
-        payAmount,
+        payAmountHex,
         {
             gasLimit: estimateGas,
             gasPrice,
@@ -35,9 +38,9 @@ async function run(privateKey, tokenAddress, tokenId, payToken, payAmount) {
 
 console.log('---- BuebioMarketplace - publish');
 run(
-    '0x59c6995e998f97a5a0044966f0945389dc9e86dae88c7a8412f4603b6b78690d', // privateKey
-    '0x5FbDB2315678afecb367f032d93F642f64180aa3', // address tokenAddress
+    'a6a6c8730f880d1448af6f40e77235d1629c62271de240aa04fc5bfffe2e298d', // privateKey
+    '0x78A2e6494283E8110Aec712Cd3F400Cc1058F541', // address tokenAddress
     1, // uint256 tokenId
-    '0xa513E6E4b8f2a923D98304ec87F64353C4D5C853', // address payToken
-    20 // uint256 payAmount
+    '0x2AE1C84F7Bc56323EA6bc588E828DAc9E1C91BcD', // address payToken
+    "1500000000000000000" // uint256 payAmount
 );

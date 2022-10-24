@@ -8,15 +8,17 @@ async function run(id, address) {
     const provider = ethersInstance();
     const contract = loadContract(CONTRACT_ADDRESS, CONTRACT_ABI, provider);
 
-    const response = await contract.balanceOf(
-        address,
+    const response = await contract.productionById(
         id
     );
-    console.log(response.toNumber());
+    console.log('------');
+    console.log(`- availableUntil: ${response.availableUntil}`);
+    console.log(`- payToken:       ${response.payToken}`);
+    console.log(`- payAmount:      ${response.payAmount.toString()}`);
+    console.log(`- recipient:      ${response.recipient}`);
 }
 
 console.log('---- BuebioFuture - balanceOf');
 run(
-    1, // token ID
-    '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512', // wallet address
+    1 // token ID
 );
